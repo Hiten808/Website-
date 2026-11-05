@@ -5,6 +5,10 @@ dist/
 # Env files
 .env
 
+# Non-website folders in this directory
+elephant-goldfish-model/
+claude-animated-shorts/
+
 # OS junk
 Thumbs.db
 .DS_Store
