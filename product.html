@@ -14,16 +14,20 @@
     <div class="container header-inner">
       <a href="index.html" class="logo">⚡ Voltra</a>
       <nav class="nav">
-        <a href="index.html" class="nav-link">← Back to store</a>
+        <a href="index.html" class="nav-link">Shop</a>
         <a href="auth.html" class="account-btn">
           <span id="accountLabel">👤 Login</span>
+        </a>
+        <a href="index.html#cart" class="cart-btn" id="cartLink">
+          🛒 Cart
+          <span class="cart-count" id="cartCountPdp">0</span>
         </a>
       </nav>
     </div>
   </header>
 
   <main class="container product-main" id="productMain">
-    <!-- Filled by product.js -->
+    <div class="pd-loading">Loading product…</div>
   </main>
 
   <footer class="footer">
@@ -46,5 +50,9 @@
 
   <script src="catalog.js"></script>
   <script src="product.js"></script>
+  <script>
+    // Compact the header when both account + cart icons exist on small screens
+    window.addEventListener("resize", () => document.body.classList.toggle("compact-header", window.innerWidth < 640));
+  </script>
 </body>
 </html>

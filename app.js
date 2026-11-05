@@ -346,3 +346,9 @@ document.addEventListener("keydown", (e) => {
 renderAccount();
 renderProducts();
 renderCart();
+
+// Auto-open the cart when arriving from another page (e.g. product page "Cart" link)
+if (location.hash === "#cart") {
+  history.replaceState(null, "", location.pathname + location.search);
+  openCart();
+}
