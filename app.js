@@ -32,6 +32,8 @@ const CATEGORIES = { audio: "Audio", phones: "Phones", laptops: "Laptops", weara
 const FREE_SHIP_MIN = 50;
 const SHIP_COST = 6.99;
 const CART_KEY = "voltra-cart";
+const SESSION_KEY = "voltra-session";
+const USERS_KEY = "voltra-users";
 
 // ----- State -----
 let cart = loadCart();
@@ -52,6 +54,80 @@ function loadCart() {
 
 function saveCart() {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+// ----- Auth session helpers (shared keys with auth.js) -----
+function getSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)) || null; }
+  catch { return null; }
+}
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
+  catch { return []; }
+}
+function currentUser() {
+  const session = getSession();
+  if (!session) return null;
+  return getUsers().find((u) => u.email === session.email) || null;
+}
+
+// ----- Header account button (top right) -----
+function renderAccount() {
+  const btn = $("#accountBtn");
+  const label = $("#accountLabel");
+  const avatar = $("#accountAvatar");
+  const user = currentUser();
+
+  // Logged out → plain login link
+  if (!user) {
+    label.textContent = "👤 Login";
+    avatar.hidden = true;
+    btn.href = "auth.html";
+    return;
+  }
+
+  // Logged in → name + avatar + dropdown menu
+  label.textContent = user.name.split(" ")[0];
+  avatar.hidden = false;
+  avatar.textContent = user.name.charAt(0).toUpperCase();
+  btn.removeAttribute("href");
+
+  let menu = $("#accountMenu");
+  if (!menu) {
+    menu = document.createElement("div");
+    menu.id = "accountMenu";
+    menu.className = "account-menu";
+    $("#accountWrap").appendChild(menu);
+    // Toggle on click, close on outside click / Esc
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      menu.classList.toggle("open");
+    });
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#accountWrap")) menu.classList.remove("open");
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") menu.classList.remove("open");
+    });
+  }
+
+  menu.innerHTML = `
+    <div class="am-head">
+      <div class="am-name">${user.name}</div>
+      <div class="am-email">${user.email}</div>
+    </div>
+    <button class="am-item" id="amOrders">📦 My orders</button>
+    <button class="am-item out" id="amLogout">↩ Log out</button>`;
+
+  $("#amLogout").addEventListener("click", () => {
+    clearSession();
+    showToast("👋 Logged out");
+    renderAccount();
+  });
+  $("#amOrders").addEventListener("click", () => showToast("📦 Order history coming soon!"));
 }
 
 function starString(rating) {
@@ -214,12 +290,19 @@ function closeCart() {
   $("#overlay").classList.remove("show");
 }
 
-// ----- Checkout (demo) -----
+// ----- Checkout (demo; requires sign-in) -----
 function checkout() {
   closeCart();
-  showToast("✅ Demo checkout complete — thanks for trying Voltra!");
+  if (!getSession()) {
+    showToast("🔐 Sign in to complete your order…");
+    setTimeout(() => (location.href = "auth.html"), 900);
+    return;
+  }
+  const user = currentUser();
+  showToast(`✅ Thanks ${user ? user.name.split(" ")[0] : ""}! Demo order placed.`);
   cart = {};
   saveCart();
+  renderAccount();
   renderCart();
   renderProducts();
 }
@@ -281,5 +364,6 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ----- Init -----
+renderAccount();
 renderProducts();
 renderCart();

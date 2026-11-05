@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in — Voltra</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body class="auth-body">
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">⚡ Voltra</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">← Back to store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="auth-main">
+    <div class="auth-card">
+      <!-- Toggle tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" type="button">Sign in</button>
+        <button class="auth-tab" id="tabRegister" type="button">Create account</button>
+      </div>
+
+      <!-- ===== Login form ===== -->
+      <form id="loginForm" novalidate>
+        <h1>Welcome back 👋</h1>
+        <p class="auth-sub">Sign in to check out faster.</p>
+
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" />
+        </div>
+
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <div class="pw-row">
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="pw-toggle" data-target="loginPassword">👁</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+        <p class="form-error" id="loginError" hidden></p>
+        <p class="form-success" id="loginSuccess" hidden></p>
+
+        <p class="auth-switch">No account yet?
+          <a href="#" id="goRegister">Create one free →</a>
+        </p>
+      </form>
+
+      <!-- ===== Register form ===== -->
+      <form id="registerForm" hidden novalidate>
+        <h1>Create your account</h1>
+        <p class="auth-sub">30-second setup. No card needed.</p>
+
+        <div class="field">
+          <label for="regName">Full name</label>
+          <input type="text" id="regName" placeholder="Hiten Kumar" autocomplete="name" />
+        </div>
+
+        <div class="field">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email" />
+        </div>
+
+        <div class="field">
+          <label for="regPassword">Password</label>
+          <div class="pw-row">
+            <input type="password" id="regPassword" placeholder="Min. 6 characters" autocomplete="new-password" />
+            <button type="button" class="pw-toggle" data-target="regPassword">👁</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="regPassword2">Confirm password</label>
+          <div class="pw-row">
+            <input type="password" id="regPassword2" placeholder="Repeat password" autocomplete="new-password" />
+            <button type="button" class="pw-toggle" data-target="regPassword2">👁</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Create account</button>
+        <p class="form-error" id="regError" hidden></p>
+
+        <p class="auth-switch">Already have an account?
+          <a href="#" id="goLogin">Sign in instead</a>
+        </p>
+      </form>
+    </div>
+  </main>
+
+  <script src="auth.js"></script>
+</body>
+</html>
