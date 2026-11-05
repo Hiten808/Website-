@@ -127,7 +127,14 @@ function renderAccount() {
     showToast("👋 Logged out");
     renderAccount();
   });
-  $("#amOrders").addEventListener("click", () => showToast("📦 Order history coming soon!"));
+  $("#amOrders").addEventListener("click", () => {
+    let orders = [];
+    try { orders = JSON.parse(localStorage.getItem("voltra-orders")) || []; } catch {}
+    if (orders.length === 0) return showToast("📦 No orders yet — go treat yourself!");
+    alert(`Your orders:\n\n` + orders
+      .map((o) => `${o.id} — $${o.total.toFixed(2)} · ${new Date(o.placedAt).toLocaleString()}`)
+      .join("\n"));
+  });
 }
 
 function starString(rating) {
@@ -290,21 +297,19 @@ function closeCart() {
   $("#overlay").classList.remove("show");
 }
 
-// ----- Checkout (demo; requires sign-in) -----
+// ----- Checkout (goes to checkout page; requires sign-in) -----
 function checkout() {
-  closeCart();
   if (!getSession()) {
+    closeCart();
     showToast("🔐 Sign in to complete your order…");
     setTimeout(() => (location.href = "auth.html"), 900);
     return;
   }
-  const user = currentUser();
-  showToast(`✅ Thanks ${user ? user.name.split(" ")[0] : ""}! Demo order placed.`);
-  cart = {};
-  saveCart();
-  renderAccount();
-  renderCart();
-  renderProducts();
+  if (cartQuantity() === 0) {
+    showToast("🛒 Your cart is empty");
+    return;
+  }
+  location.href = "checkout.html";
 }
 
 // ----- Events -----
