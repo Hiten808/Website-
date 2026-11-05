@@ -1,0 +1,10 @@
+# Vite/build outputs
+node_modules/
+dist/
+
+# Env files
+.env
+
+# OS junk
+Thumbs.db
+.DS_Store
