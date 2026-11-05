@@ -1,34 +1,8 @@
 /* ===== Voltra — store logic ===== */
 
-// ----- Product catalog -----
-const PRODUCTS = [
-  { id: 1,  name: "Pulse Cans Pro",       category: "audio",        price: 199, oldPrice: 249, rating: 4.8, tag: "sale", emoji: "🎧",
-    desc: "Noise-cancelling over-ear headphones", grad: "linear-gradient(135deg,#6c5ce7,#4834d4)" },
-  { id: 2,  name: "Pixel Buds Air",       category: "audio",        price: 89,  oldPrice: null, rating: 4.5, tag: null, emoji: "🎵",
-    desc: "True wireless earbuds, 30h battery", grad: "linear-gradient(135deg,#00b8d4,#01579b)" },
-  { id: 3,  name: "BoomBox Mini",         category: "audio",        price: 59,  oldPrice: 79, rating: 4.3, tag: "sale", emoji: "🔊",
-    desc: "Waterproof pocket speaker", grad: "linear-gradient(135deg,#ff6b3d,#e7316b)" },
-  { id: 4,  name: "VPhone X5",            category: "phones",       price: 899, oldPrice: null, rating: 4.9, tag: "hot", emoji: "📱",
-    desc: "6.7\" OLED · 5G · 512GB", grad: "linear-gradient(135deg,#0f2027,#2c5364)" },
-  { id: 5,  name: "VPhone Lite",          category: "phones",       price: 449, oldPrice: 499, rating: 4.4, tag: "sale", emoji: "☎️",
-    desc: "Flagship feel, mid-range price", grad: "linear-gradient(135deg,#11998e,#38ef7d)" },
-  { id: 6,  name: "AirBook 14",           category: "laptops",      price: 1299, oldPrice: null, rating: 4.9, tag: "new", emoji: "💻",
-    desc: "14\" laptop · 18h battery · 1TB", grad: "linear-gradient(135deg,#414345,#8e9eab)" },
-  { id: 7,  name: "CreatorBook Pro 16",   category: "laptops",      price: 1899, oldPrice: 2099, rating: 4.7, tag: "sale", emoji: "🖥️",
-    desc: "For creators who don't wait", grad: "linear-gradient(135deg,#3a1c71,#d76d77)" },
-  { id: 8,  name: "Pulse Watch S",        category: "wearables",    price: 279, oldPrice: null, rating: 4.6, tag: "new", emoji: "⌚",
-    desc: "Health tracking, 7-day battery", grad: "linear-gradient(135deg,#1e3c72,#2a5298)" },
-  { id: 9,  name: "Track Band 3",         category: "wearables",    price: 79,  oldPrice: null, rating: 4.2, tag: null, emoji: "📟",
-    desc: "Sleep, steps & heart rate", grad: "linear-gradient(135deg,#8e2de2,#4a00e0)" },
-  { id: 10, name: "FastCharge 65W GaN",   category: "accessories",  price: 39,  oldPrice: null, rating: 4.7, tag: null, emoji: "🔌",
-    desc: "Charges laptops, phones, tabs", grad: "linear-gradient(135deg,#f7971e,#ffd200)" },
-  { id: 11, name: "PocketDrive 2TB",      category: "accessories",  price: 129, oldPrice: 149, rating: 4.5, tag: "sale", emoji: "💾",
-    desc: "USB-C SSD · 1050 MB/s reads", grad: "linear-gradient(135deg,#005c97,#363795)" },
-  { id: 12, name: "Grip Mat Wireless",    category: "accessories",  price: 49,  oldPrice: null, rating: 4.1, tag: null, emoji: "🖱️",
-    desc: "Charging mouse pad (RGB)", grad: "linear-gradient(135deg,#232526,#950d3d)" },
-];
-
-const CATEGORIES = { audio: "Audio", phones: "Phones", laptops: "Laptops", wearables: "Wearables", accessories: "Accessories" };
+// ----- Product catalog (shared, from catalog.js) -----
+const PRODUCTS = window.PRODUCTS;
+const CATEGORIES = window.CATEGORY_NAMES;
 const FREE_SHIP_MIN = 50;
 const SHIP_COST = 6.99;
 const CART_KEY = "voltra-cart";
@@ -178,13 +152,13 @@ function renderProducts() {
           : "";
       return `
       <article class="card">
-        <div class="card-img" style="background:${p.grad}">
+        <a class="card-img" href="product.html?id=${p.id}" style="background:${p.grad}" aria-label="${p.name}">
           <span aria-hidden="true">${p.emoji}</span>
           ${tagLabel ? `<span class="${tagClass}">${tagLabel}</span>` : ""}
-        </div>
+        </a>
         <div class="card-body">
           <span class="card-cat">${CATEGORIES[p.category]}</span>
-          <h3 class="card-title">${p.name}</h3>
+          <h3 class="card-title"><a href="product.html?id=${p.id}">${p.name}</a></h3>
           <p class="card-rating"><span class="stars">${starString(p.rating)}</span> ${p.rating}</p>
           <div class="card-foot">
             <span class="price">${money(p.price)}${p.oldPrice ? `<span class="old">${money(p.oldPrice)}</span>` : ""}</span>

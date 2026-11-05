@@ -7,20 +7,7 @@ const ORDERS_KEY = "voltra-orders";
 const FREE_SHIP_MIN = 50;
 const SHIP_COST = 6.99;
 
-const PRODUCTS = [
-  { id: 1,  name: "Pulse Cans Pro",     price: 199,  emoji: "🎧", grad: "linear-gradient(135deg,#6c5ce7,#4834d4)" },
-  { id: 2,  name: "Pixel Buds Air",     price: 89,   emoji: "🎵", grad: "linear-gradient(135deg,#00b8d4,#01579b)" },
-  { id: 3,  name: "BoomBox Mini",       price: 59,   emoji: "🔊", grad: "linear-gradient(135deg,#ff6b3d,#e7316b)" },
-  { id: 4,  name: "VPhone X5",          price: 899,  emoji: "📱", grad: "linear-gradient(135deg,#0f2027,#2c5364)" },
-  { id: 5,  name: "VPhone Lite",        price: 449,  emoji: "☎️", grad: "linear-gradient(135deg,#11998e,#38ef7d)" },
-  { id: 6,  name: "AirBook 14",         price: 1299, emoji: "💻", grad: "linear-gradient(135deg,#414345,#8e9eab)" },
-  { id: 7,  name: "CreatorBook Pro 16", price: 1899, emoji: "🖥️", grad: "linear-gradient(135deg,#3a1c71,#d76d77)" },
-  { id: 8,  name: "Pulse Watch S",      price: 279,  emoji: "⌚", grad: "linear-gradient(135deg,#1e3c72,#2a5298)" },
-  { id: 9,  name: "Track Band 3",       price: 79,   emoji: "📟", grad: "linear-gradient(135deg,#8e2de2,#4a00e0)" },
-  { id: 10, name: "FastCharge 65W GaN", price: 39,   emoji: "🔌", grad: "linear-gradient(135deg,#f7971e,#ffd200)" },
-  { id: 11, name: "PocketDrive 2TB",    price: 129,  emoji: "💾", grad: "linear-gradient(135deg,#005c97,#363795)" },
-  { id: 12, name: "Grip Mat Wireless",  price: 49,   emoji: "🖱️", grad: "linear-gradient(135deg,#232526,#950d3d)" },
-];
+const PRODUCTS = window.PRODUCTS; // shared catalog (catalog.js)
 
 const $ = (sel) => document.querySelector(sel);
 const money = (n) => `$${n.toFixed(2)}`;
