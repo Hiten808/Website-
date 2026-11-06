@@ -40,6 +40,44 @@ function hashPassword(password, salt = "voltra-v1") {
 /* ---------- Validation helpers ---------- */
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Password policy (account registration): min 8 chars, must include all four character types
+function passwordPolicyErrors(pw) {
+  const missing = [];
+  if (pw.length < 8) missing.push("must be at least 8 characters long");
+  if (!/[A-Z]/.test(pw)) missing.push("needs at least one capital letter (A–Z)");
+  if (!/[a-z]/.test(pw)) missing.push("needs at least one small letter (a–z)");
+  if (!/[0-9]/.test(pw)) missing.push("needs at least one number (0–9)");
+  if (!/[^A-Za-z0-9]/.test(pw)) missing.push("needs at least one special symbol (!@#$…)");
+  return missing;
+}
+
+// Live strength checklist shown as the user types
+const PW_RULES = [
+  { label: "8+ characters",        test: (pw) => pw.length >= 8 },
+  { label: "Capital letter (A–Z)", test: (pw) => /[A-Z]/.test(pw) },
+  { label: "Small letter (a–z)",   test: (pw) => /[a-z]/.test(pw) },
+  { label: "Number (0–9)",         test: (pw) => /[0-9]/.test(pw) },
+  { label: "Special symbol (!@#$…)", test: (pw) => /[^A-Za-z0-9]/.test(pw) },
+];
+
+function buildPwChecklist() {
+  const reg = document.getElementById("registerForm");
+  if (!reg || document.getElementById("pwChecklist")) return;
+  const anchor = document.getElementById("regPassword").closest(".field");
+  const list = document.createElement("ul");
+  list.id = "pwChecklist";
+  list.className = "pw-checklist";
+  list.innerHTML = PW_RULES.map((r) => `<li data-ok="false">${r.label}</li>`).join("");
+  anchor.after(list);
+}
+
+function updatePwChecklist() {
+  const pw = document.getElementById("regPassword").value;
+  document.querySelectorAll("#pwChecklist li").forEach((li, i) => {
+    li.setAttribute("data-ok", String(PW_RULES[i].test(pw)));
+  });
+}
+
 function showError(id, msg) {
   const el = document.getElementById(id);
   el.textContent = "⚠ " + msg;
@@ -123,6 +161,10 @@ document.querySelectorAll(".pw-toggle").forEach((btn) => {
   });
 });
 
+// Live password-strength checklist on the register form
+buildPwChecklist();
+document.getElementById("regPassword").addEventListener("input", updatePwChecklist);
+
 /* ---------- Login ---------- */
 document.getElementById("loginForm").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -165,7 +207,12 @@ document.getElementById("registerForm").addEventListener("submit", (e) => {
 
   if (name.length < 2) return (showError("regError", "Enter your full name."), markInvalid(nameEl));
   if (!emailRe.test(email)) return (showError("regError", "Enter a valid email address."), markInvalid(emailEl));
-  if (password.length < 6) return (showError("regError", "Password must be at least 6 characters."), markInvalid(pwEl));
+
+  // Password policy: min 8, uppercase + lowercase + number + special character
+  const policyErrors = passwordPolicyErrors(password);
+  if (policyErrors.length > 0) {
+    return (showError("regError", "Password too weak — " + policyErrors[0]), markInvalid(pwEl));
+  }
   if (password !== confirm) return (showError("regError", "Passwords don't match."), markInvalid(pw2El));
 
   const users = getUsers();

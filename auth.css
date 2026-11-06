@@ -123,6 +123,35 @@
   75% { transform: translateX(5px); }
 }
 
+/* ===== Password strength checklist ===== */
+.pw-checklist {
+  margin: -4px 0 16px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.pw-checklist li {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+.pw-checklist li::before {
+  content: "○";
+  font-weight: 800;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.pw-checklist li[data-ok="true"] { color: #7bed9f; }
+.pw-checklist li[data-ok="true"]::before { content: "✓"; color: var(--green); }
+
 /* Switch text */
 .auth-switch {
   text-align: center;
