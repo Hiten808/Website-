@@ -1,6 +1,12 @@
 # Vite/build outputs
 node_modules/
 dist/
+.next/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
 
 # Env files
 .env

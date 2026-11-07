@@ -1,0 +1,20 @@
+# Voltra DB + API for local development.  Run: docker compose up -d
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: voltra
+      POSTGRES_PASSWORD: voltra
+      POSTGRES_DB: voltra
+    ports:
+      - "5432:5432"
+    volumes:
+      - voltra_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U voltra"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  voltra_pgdata:
